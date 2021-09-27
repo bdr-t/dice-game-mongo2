@@ -78,7 +78,7 @@ describe('Auth routes', () => {
       await insertUsers([userTwo]);
       const loginCredentials = {
         name: userTwo.name,
-        password: userTwo.password,
+        password: 'password1',
       };
 
       const res = await request(app).post('/auth/login').send(loginCredentials).expect(httpStatus.OK);
@@ -86,14 +86,6 @@ describe('Auth routes', () => {
       expect(res.body.user).toEqual({
         id: expect.anything(),
         name: userTwo.name,
-        games: [
-          {
-            result: userTwo.games[0].result,
-            sumDice: userTwo.games[0].sumDice,
-            _id: expect.anything(),
-          },
-        ],
-        succes_rate: userTwo.succes_rate,
       });
 
       expect(res.body.tokens).toEqual({

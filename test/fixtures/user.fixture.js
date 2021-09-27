@@ -36,16 +36,7 @@ const userOne = {
 
 const userTwo = {
   _id: mongoose.Types.ObjectId(),
-  name: 'userTwo',
-  games: [
-    {
-      sumDice: 10,
-      resutlt: 0,
-    },
-  ],
-
-  succes_rate: 0,
-  password,
+  name: 'admin',
 };
 
 const insertUsers = async (users) => {
