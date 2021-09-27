@@ -1,6 +1,8 @@
 const httpStatus = require('http-status');
 const userService = require('./user.service');
 const ApiError = require('../utils/ApiError');
+const mongoose = require('mongoose');
+
 
 /**
  * Login with username and password
@@ -16,6 +18,18 @@ const loginUserWithNameAndPassword = async (name, password) => {
   return user;
 };
 
+const loginUserWithNameAndPasswordAdmin = async (name, password) => {
+  const admin = name === "admin" ? true : false
+  if (!admin || !(password === 'password1')) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect name or password');
+  }
+  return {
+    id: new mongoose.Types.ObjectId(),
+    name: 'admin'
+  };
+}
+
 module.exports = {
   loginUserWithNameAndPassword,
+  loginUserWithNameAndPasswordAdmin
 };
