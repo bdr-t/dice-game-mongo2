@@ -7,7 +7,7 @@ const router = express.Router();
 //   res.send('user');
 // });
 
-router.get('/', auth('admin'), (req, res) => {
+router.get('/', auth(), (req, res) => {
   res.send('funciona');
 });
 module.exports = router;
