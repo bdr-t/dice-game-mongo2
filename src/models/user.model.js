@@ -15,7 +15,6 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     trim: true,
     minlength: 8,
     validate(value) {
@@ -39,16 +38,6 @@ userSchema.plugin(toJSON);
 userSchema.statics.isNameTaken = async function (name, excludeUserId) {
   const user = await this.findOne({ name, _id: { $ne: excludeUserId } });
   return !!user;
-};
-
-/**
- * Check if password matches the user's password
- * @param {string} password
- * @returns {Promise<boolean>}
- */
-userSchema.methods.isPasswordMatch = async function (password) {
-  const user = this;
-  return bcrypt.compare(password, user.password);
 };
 
 userSchema.pre('save', async function (next) {

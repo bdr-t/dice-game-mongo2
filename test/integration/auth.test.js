@@ -34,8 +34,6 @@ describe('Auth routes', () => {
       expect(res.body.user).toEqual({
         id: expect.anything(),
         name: newUser.name,
-        succes_rate: 0,
-        games: [],
       });
 
       const dbUser = await User.findById(res.body.user.id);
