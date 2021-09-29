@@ -1,5 +1,6 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
+const playersController = require('../controllers/players.controller');
 
 const router = express.Router();
 
@@ -7,9 +8,7 @@ const router = express.Router();
 //   res.send('user');
 // });
 
-router.get('/', auth(), (req, res) => {
-  res.send('funciona');
-});
+router.post('/', auth(), playersController.createUser);
 module.exports = router;
 
 /*
