@@ -10,6 +10,8 @@ const router = express.Router();
 
 router.post('/', auth(), playersController.createUser);
 router.put('/:name', auth(), playersController.updateUser);
+router.post('/:name', auth(), playersController.createGame);
+
 module.exports = router;
 
 /*

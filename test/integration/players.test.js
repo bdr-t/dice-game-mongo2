@@ -83,7 +83,7 @@ describe('Players routes', () => {
     });
   });
 
-  describe('PUT /players', () => {
+  describe('PUT /players/:name', () => {
     const newName = { name: 'newName' };
     test('should return 200 and successfully update user if data is ok', async () => {
       await insertUsers([userOne, userTwo]);
@@ -136,6 +136,27 @@ describe('Players routes', () => {
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send({ name: 'admin' })
         .expect(httpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('POST /players/:name', () => {
+    test('should return 401 error if access token is missing', async () => {
+      await request(app).post(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
+    });
+    test('should return 200 if player exists', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+      const res = await request(app)
+        .post(`/players/${userTwo.name}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.OK);
+
+      expect(res.body).toEqual({
+        dice1: expect.anything(),
+        dice2: expect.anything(),
+        result: expect.anything(),
+        succes_rate: expect.anything(),
+      });
     });
   });
 });
