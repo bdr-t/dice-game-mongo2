@@ -5,7 +5,7 @@ const httpStatus = require('http-status');
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
 const { User } = require('../../src/models');
-const { userOne, insertUsers } = require('../fixtures/user.fixture');
+const { userOne, userTwo, insertUsers } = require('../fixtures/user.fixture');
 const { userOneAccessToken, insertToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
@@ -80,6 +80,62 @@ describe('Players routes', () => {
         games: [],
         succes_rate: 0,
       });
+    });
+  });
+
+  describe('PUT /players', () => {
+    const newName = { name: 'newName' };
+    test('should return 200 and successfully update user if data is ok', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+
+      const res = await request(app)
+        .put(`/players/${userTwo.name}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send(newName)
+        .expect(httpStatus.OK);
+
+      expect(res.body.user).toEqual({
+        id: expect.anything(),
+        name: newName.name,
+        games: [],
+        succes_rate: 0,
+      });
+    });
+    test('should return 401 error if access token is missing', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+      await request(app).put(`/players/${userTwo.name}`).send(newName).expect(httpStatus.UNAUTHORIZED);
+    });
+    test("should return 400 error if name dosen't exist", async () => {
+      await insertUsers([userOne]);
+      await insertToken();
+
+      await request(app)
+        .put(`/players/name`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send(newName)
+        .expect(httpStatus.BAD_REQUEST);
+    });
+    test('should return 400 error if name already exist', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+
+      await request(app)
+        .put(`/players/name`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send({ name: 'userTwo' })
+        .expect(httpStatus.BAD_REQUEST);
+    });
+    test('should return 400 if you try to change admin name', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+
+      await request(app)
+        .put(`/players/name`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send({ name: 'admin' })
+        .expect(httpStatus.BAD_REQUEST);
     });
   });
 });

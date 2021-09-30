@@ -5,7 +5,7 @@ const ranking = {
   ranking: [
     {
       user: 'userOne',
-      succes_rate: 50,
+      succes_rate: 0,
     },
     {
       user: 'userTwo',

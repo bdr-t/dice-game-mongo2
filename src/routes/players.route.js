@@ -9,6 +9,7 @@ const router = express.Router();
 // });
 
 router.post('/', auth(), playersController.createUser);
+router.put('/:name', auth(), playersController.updateUser);
 module.exports = router;
 
 /*
