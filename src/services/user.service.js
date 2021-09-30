@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const anonimId = require('../utils/anonimId');
 
 /**
  * Create a user
@@ -9,6 +10,10 @@ const ApiError = require('../utils/ApiError');
  */
 
 const createUser = async (userBody) => {
+  if (Object.keys(userBody).length === 0) {
+    const id = anonimId();
+    return User.create({ name: `ANÒNIM-${id}` });
+  }
   if (await User.isNameTaken(userBody.name)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Name already taken');
   }

@@ -34,8 +34,6 @@ describe('Auth routes', () => {
       expect(res.body.user).toEqual({
         id: expect.anything(),
         name: newUser.name,
-        succes_rate: 0,
-        games: [],
       });
 
       const dbUser = await User.findById(res.body.user.id);
@@ -97,7 +95,7 @@ describe('Auth routes', () => {
     test('should return 401 error if there are no users with that name', async () => {
       const loginCredentials = {
         name: userOne.name,
-        password: userOne.password,
+        password: 'password1',
       };
 
       const res = await request(app).post('/auth/login').send(loginCredentials).expect(httpStatus.UNAUTHORIZED);

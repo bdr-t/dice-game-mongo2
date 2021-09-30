@@ -8,30 +8,7 @@ const hashedPassword = bcrypt.hashSync(password, salt);
 
 const userOne = {
   _id: mongoose.Types.ObjectId(),
-  name: 'userOne',
-  games: [
-    {
-      sumDice: 10,
-      resutlt: 0,
-    },
-    {
-      sumDice: 7,
-      resutlt: 1,
-    },
-
-    {
-      sumDice: 8,
-      resutlt: 0,
-    },
-
-    {
-      sumDice: 7,
-      resutlt: 1,
-    },
-  ],
-
-  succes_rate: 50,
-  password,
+  name: 'admin',
 };
 
 const userTwo = {
