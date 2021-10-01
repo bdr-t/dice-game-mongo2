@@ -8,7 +8,15 @@ const userSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  games: [{ sumDice: Number, result: Number }],
+  lost: {
+    type: Number,
+    default: 0,
+  },
+  won: {
+    type: Number,
+    default: 0,
+  },
+  games: [{ sumDice: Number, result: String }],
   succes_rate: {
     type: Number,
     default: 0,
@@ -47,10 +55,6 @@ userSchema.pre('save', async function (next) {
   }
   next();
 });
-
-/**
- * @typedef User
- */
 
 const User = mongoose.model('User', userSchema);
 

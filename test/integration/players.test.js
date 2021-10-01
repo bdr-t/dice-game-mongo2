@@ -29,6 +29,8 @@ describe('Players routes', () => {
         name: newUser.name,
         games: [],
         succes_rate: 0,
+        lost: 0,
+        won: 0,
       });
 
       const dbUser = await User.findById(res.body.user.id).lean();
@@ -67,6 +69,8 @@ describe('Players routes', () => {
         name: 'ANÒNIM-1',
         games: [],
         succes_rate: 0,
+        lost: 0,
+        won: 0,
       });
 
       const res2 = await request(app)
@@ -79,6 +83,8 @@ describe('Players routes', () => {
         name: 'ANÒNIM-2',
         games: [],
         succes_rate: 0,
+        lost: 0,
+        won: 0,
       });
     });
   });
@@ -100,6 +106,8 @@ describe('Players routes', () => {
         name: newName.name,
         games: [],
         succes_rate: 0,
+        lost: 0,
+        won: 0,
       });
     });
     test('should return 401 error if access token is missing', async () => {
@@ -127,6 +135,7 @@ describe('Players routes', () => {
         .send({ name: 'userTwo' })
         .expect(httpStatus.BAD_REQUEST);
     });
+
     test('should return 400 if you try to change admin name', async () => {
       await insertUsers([userOne, userTwo]);
       await insertToken();
@@ -135,6 +144,16 @@ describe('Players routes', () => {
         .put(`/players/name`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send({ name: 'admin' })
+        .expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 400 if you tray to change inexistent user', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+      await request(app)
+        .put(`/players/jahsjhkasjhsad`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send({ name: 'jkahskdas' })
         .expect(httpStatus.BAD_REQUEST);
     });
   });
@@ -156,6 +175,8 @@ describe('Players routes', () => {
         dice2: expect.anything(),
         result: expect.anything(),
         succes_rate: expect.anything(),
+        lost: expect.anything(),
+        won: expect.anything(),
       });
     });
   });
