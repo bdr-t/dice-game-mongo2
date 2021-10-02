@@ -178,4 +178,47 @@ describe('Players routes', () => {
       });
     });
   });
+
+  describe('DELETE /players/name', () => {
+    test('should return 200 and delete all the games', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+
+      await request(app)
+        .post(`/players/${userTwo.name}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.OK);
+
+      await request(app)
+        .post(`/players/${userTwo.name}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.OK);
+
+      const res = await request(app)
+        .delete(`/players/${userTwo.name}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.OK);
+
+      expect(res.body.user).toEqual({
+        id: expect.anything(),
+        name: userTwo.name,
+        games: [],
+        succes_rate: 0,
+        lost: 0,
+        won: 0,
+      });
+    });
+    test('should return 401 error if access token is missing', async () => {
+      await request(app).post(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
+    });
+
+    test("should return 400 error if name dosen't exist", async () => {
+      await insertUsers([userOne]);
+      await insertToken();
+      await request(app)
+        .delete(`/players/bader`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.BAD_REQUEST);
+    });
+  });
 });

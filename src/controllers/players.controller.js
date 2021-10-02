@@ -9,7 +9,7 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const user = await userService.updateUser(req.body, req.params);
+  const user = await userService.updateNameUser(req.body, req.params);
   res.status(httpStatus.OK).send({ user });
 });
 
@@ -34,8 +34,14 @@ const createGame = catchAsync(async (req, res) => {
   });
 });
 
+const deleteGames = catchAsync(async (req, res) => {
+  const user = await userService.updateGames(req.params.name);
+  res.status(httpStatus.OK).send({ user });
+});
+
 module.exports = {
   createUser,
   updateUser,
   createGame,
+  deleteGames,
 };
