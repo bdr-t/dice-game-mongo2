@@ -12,6 +12,8 @@ router.post('/', auth(), playersController.createUser);
 router.put('/:name', auth(), playersController.updateUser);
 router.post('/:name', auth(), playersController.createGame);
 router.delete('/:name', auth(), playersController.deleteGames);
+router.get('/', auth(), playersController.getAllUsers);
+router.get('/:name', auth(), playersController.getUser);
 
 module.exports = router;
 

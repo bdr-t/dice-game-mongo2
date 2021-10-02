@@ -18,6 +18,13 @@ const userTwo = {
   succes_rate: 0,
 };
 
+const userThree = {
+  _id: mongoose.Types.ObjectId(),
+  name: 'userTwo',
+  games: [],
+  succes_rate: 0,
+};
+
 const insertUsers = async (users) => {
   await User.insertMany(users.map((user) => ({ ...user, password: hashedPassword })));
 };
@@ -25,5 +32,6 @@ const insertUsers = async (users) => {
 module.exports = {
   userOne,
   userTwo,
+  userThree,
   insertUsers,
 };

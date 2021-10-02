@@ -45,7 +45,9 @@ const updateNameUser = async (userBody, userParams) => {
  * @returns {Promise<User>}
  */
 const getUserByName = async (name) => {
-  return User.findOne({ name });
+  const user = await User.findOne({ name });
+  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "Name dosen't exsist");
+  return user;
 };
 
 const updateGames = async (name, newUser = { games: [], lost: 0, won: 0, succes_rate: 0 }) => {
@@ -57,9 +59,14 @@ const updateGames = async (name, newUser = { games: [], lost: 0, won: 0, succes_
   return User.findOne({ name });
 };
 
+const getAllUsers = async () => {
+  return User.find({ name: { $ne: 'admin' } });
+};
+
 module.exports = {
   createUser,
   getUserByName,
   updateNameUser,
   updateGames,
+  getAllUsers,
 };
