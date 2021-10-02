@@ -39,9 +39,21 @@ const deleteGames = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ user });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const users = await userService.getAllUsers();
+  res.status(httpStatus.OK).send({ users });
+});
+
+const getUser = catchAsync(async (req, res) => {
+  const user = await userService.getUserByName(req.params.name);
+  res.status(httpStatus.OK).send({ user });
+});
+
 module.exports = {
   createUser,
   updateUser,
   createGame,
   deleteGames,
+  getAllUsers,
+  getUser,
 };

@@ -5,7 +5,7 @@ const httpStatus = require('http-status');
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
 const { User } = require('../../src/models');
-const { userOne, userTwo, insertUsers } = require('../fixtures/user.fixture');
+const { userOne, userTwo, userThree, insertUsers } = require('../fixtures/user.fixture');
 const { userOneAccessToken, insertToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
@@ -219,6 +219,68 @@ describe('Players routes', () => {
         .delete(`/players/bader`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .expect(httpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('GET /players', () => {
+    test('should return 200 and get all the players', async () => {
+      await insertUsers([userOne, userTwo, userThree]);
+      await insertToken();
+      const { body } = await request(app)
+        .get(`/players`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.OK);
+      expect(body.users.length).toEqual(2);
+    });
+
+    test('should return 200 if there are no users yet', async () => {
+      await insertUsers([userOne]);
+      await insertToken();
+      const res = await request(app)
+        .get(`/players`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.OK);
+
+      expect(res.body).toEqual({
+        users: [],
+      });
+    });
+
+    test('should return 401 error if access token is missing', async () => {
+      await request(app).get(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
+    });
+  });
+
+  describe('GET /players/:name', () => {
+    test('should return 200 and get the player', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertToken();
+      const { body } = await request(app)
+        .get(`/players/${userTwo.name}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.OK);
+
+      expect(body.user).toEqual({
+        id: expect.anything(),
+        name: userTwo.name,
+        games: [],
+        succes_rate: 0,
+        lost: 0,
+        won: 0,
+      });
+    });
+
+    test("should return 400 error if user dosn't exist", async () => {
+      await insertUsers([userOne]);
+      await insertToken();
+      await request(app)
+        .get(`/players/bader`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 401 error if access token is missing', async () => {
+      await request(app).get(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
     });
   });
 });
