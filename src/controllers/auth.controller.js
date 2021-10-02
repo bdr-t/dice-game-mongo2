@@ -15,12 +15,12 @@ const register = catchAsync(async (req, res) => {
   });
 });
 
-const login = catchAsync(async (req, res) => {
-  const { name, password } = req.body;
-  const user = await authService.loginUserWithNameAndPassword(name, password);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
-});
+// const login = catchAsync(async (req, res) => {
+//   const { name, password } = req.body;
+//   const user = await authService.loginUserWithNameAndPassword(name, password);
+//   const tokens = await tokenService.generateAuthTokens(user);
+//   res.send({ user, tokens });
+// });
 
 const loginAdmin = catchAsync(async (req, res) => {
   const { name, password } = req.body;
@@ -42,6 +42,5 @@ const loginAdmin = catchAsync(async (req, res) => {
 
 module.exports = {
   register,
-  login,
   loginAdmin,
 };

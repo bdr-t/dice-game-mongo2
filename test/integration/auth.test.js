@@ -11,7 +11,7 @@ const ApiError = require('../../src/utils/ApiError');
 const setupTestDB = require('../utils/setupTestDB');
 const { User } = require('../../src/models');
 const { tokenTypes } = require('../../src/config/tokens');
-const { userOne, userTwo, insertUsers } = require('../fixtures/user.fixture');
+const { userOne, insertUsers } = require('../fixtures/user.fixture');
 const { userOneAccessToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
@@ -73,9 +73,9 @@ describe('Auth routes', () => {
 
   describe('POST /auth/login', () => {
     test('should return 200 and login user if name and password match', async () => {
-      await insertUsers([userTwo]);
+      await insertUsers([userOne]);
       const loginCredentials = {
-        name: userTwo.name,
+        name: userOne.name,
         password: 'password1',
       };
 
@@ -83,7 +83,7 @@ describe('Auth routes', () => {
 
       expect(res.body.user).toEqual({
         id: expect.anything(),
-        name: userTwo.name,
+        name: userOne.name,
       });
 
       expect(res.body.tokens).toEqual({
@@ -94,13 +94,13 @@ describe('Auth routes', () => {
 
     test('should return 401 error if there are no users with that name', async () => {
       const loginCredentials = {
-        name: userOne.name,
+        name: 'bader',
         password: 'password1',
       };
 
       const res = await request(app).post('/auth/login').send(loginCredentials).expect(httpStatus.UNAUTHORIZED);
 
-      expect(res.body).toEqual({ code: httpStatus.UNAUTHORIZED, message: 'Incorrect name or password' });
+      expect(res.body).toEqual({ code: httpStatus.UNAUTHORIZED, message: 'Only admin can login' });
     });
 
     test('should return 401 error if password is wrong', async () => {

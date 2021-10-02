@@ -39,6 +39,13 @@ const updateUser = async (userBody, userParams) => {
   throw new ApiError(httpStatus.BAD_REQUEST, "Name dosen't exsist");
 };
 
+const updateGames = async (name, newUser) => {
+  await User.updateOne({ name }, { games: newUser.games });
+  await User.updateOne({ name }, { lost: newUser.lost });
+  await User.updateOne({ name }, { won: newUser.won });
+  await User.updateOne({ name }, { succes_rate: newUser.succes_rate });
+};
+
 /**
  * Get user by name
  * @param {string} name
@@ -52,4 +59,5 @@ module.exports = {
   createUser,
   getUserByName,
   updateUser,
+  updateGames,
 };
