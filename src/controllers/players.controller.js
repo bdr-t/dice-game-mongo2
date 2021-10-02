@@ -30,7 +30,7 @@ const createGame = catchAsync(async (req, res) => {
     dice1: game.dice1,
     dice2: game.dice2,
     succes_rate: game.succes_rate,
-    resut: game.resultText,
+    result: game.resultText,
   });
 });
 

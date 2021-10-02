@@ -175,8 +175,6 @@ describe('Players routes', () => {
         dice2: expect.anything(),
         result: expect.anything(),
         succes_rate: expect.anything(),
-        lost: expect.anything(),
-        won: expect.anything(),
       });
     });
   });
