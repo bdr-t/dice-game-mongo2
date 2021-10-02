@@ -26,7 +26,7 @@ const createUser = async (userBody) => {
  * @returns {Promise<User>}
  */
 
-const updateUser = async (userBody, userParams) => {
+const updateNameUser = async (userBody, userParams) => {
   if (await User.isNameTaken(userBody.name)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'That name already exists');
   }
@@ -39,13 +39,6 @@ const updateUser = async (userBody, userParams) => {
   throw new ApiError(httpStatus.BAD_REQUEST, "Name dosen't exsist");
 };
 
-const updateGames = async (name, newUser) => {
-  await User.updateOne({ name }, { games: newUser.games });
-  await User.updateOne({ name }, { lost: newUser.lost });
-  await User.updateOne({ name }, { won: newUser.won });
-  await User.updateOne({ name }, { succes_rate: newUser.succes_rate });
-};
-
 /**
  * Get user by name
  * @param {string} name
@@ -55,9 +48,18 @@ const getUserByName = async (name) => {
   return User.findOne({ name });
 };
 
+const updateGames = async (name, newUser = { games: [], lost: 0, won: 0, succes_rate: 0 }) => {
+  if (!(await getUserByName(name))) throw new ApiError(httpStatus.BAD_REQUEST, "Name dosen't exsist");
+  await User.updateOne({ name }, { games: newUser.games });
+  await User.updateOne({ name }, { lost: newUser.lost });
+  await User.updateOne({ name }, { won: newUser.won });
+  await User.updateOne({ name }, { succes_rate: newUser.succes_rate });
+  return User.findOne({ name });
+};
+
 module.exports = {
   createUser,
   getUserByName,
-  updateUser,
+  updateNameUser,
   updateGames,
 };

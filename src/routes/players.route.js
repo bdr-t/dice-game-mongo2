@@ -11,11 +11,12 @@ const router = express.Router();
 router.post('/', auth(), playersController.createUser);
 router.put('/:name', auth(), playersController.updateUser);
 router.post('/:name', auth(), playersController.createGame);
+router.delete('/:name', auth(), playersController.deleteGames);
 
 module.exports = router;
 
 /*
-1. router.post('/') => crear jugador
+1. router.post('/') => crear jugador 
 2. router.put('/') => modifica el nom jugador
 3. router.post('/:id/games') => jugar partida
 4. router.delete('/:id:games') => elimina jocs del jugadore
