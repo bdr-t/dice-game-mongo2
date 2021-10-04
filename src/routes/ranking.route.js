@@ -1,10 +1,12 @@
 const express = require('express');
+const auth = require('../middlewares/auth');
+const rankingController = require('../controllers/ranking.controller');
 
 const router = express.Router();
 
-router.get('/', function (req, res) {
-  res.send('ranking');
-});
+router.get('/', auth(), rankingController.getAllUsers);
+router.get('/loser', auth(), rankingController.getLoser);
+router.get('/winner', auth(), rankingController.getWinner);
 
 module.exports = router;
 
