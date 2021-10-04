@@ -5,6 +5,8 @@ const rankingController = require('../controllers/ranking.controller');
 const router = express.Router();
 
 router.get('/', auth(), rankingController.getAllUsers);
+router.get('/loser', auth(), rankingController.getLoser);
+router.get('/winner', auth(), rankingController.getWinner);
 
 module.exports = router;
 
