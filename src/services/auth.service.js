@@ -8,13 +8,6 @@ const ApiError = require('../utils/ApiError');
  * @param {string} password
  * @returns {Promise<User>}
  */
-// const loginUserWithNameAndPassword = async (name, password) => {
-//   const user = await userService.getUserByName(name);
-//   if (!user || !(await user.isPasswordMatch(password))) {
-//     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect name or password');
-//   }
-//   return user;
-// };
 
 const loginUserWithNameAndPasswordAdmin = async (name, password) => {
   const user = await userService.getUserByName(name);

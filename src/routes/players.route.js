@@ -18,10 +18,10 @@ router.get('/:name', auth(), playersController.getUser);
 module.exports = router;
 
 /*
-1. router.post('/') => crear jugador 
-2. router.put('/') => modifica el nom jugador
-3. router.post('/:id/games') => jugar partida
-4. router.delete('/:id:games') => elimina jocs del jugadore
-5. router.get('/') => retorna tots els jugadors amb percentatje exits
-6. router.get('/:id:games) => retorna llista de juagades per jugador
+1. TODO router.post('/') => crear jugador 
+2. TODO router.put('/') => modifica el nom jugador
+3. TODO router.post('/:id/games') => jugar partida
+4. TODO router.delete('/:id:games') => elimina jocs del jugadore
+5. TODO router.get('/') => retorna tots els jugadors amb percentatje exits
+6. TODO router.get('/:id:games) => retorna llista de juagades per jugador
 */

@@ -12,7 +12,7 @@ const anonimId = require('../utils/anonimId');
 const createUser = async (userBody) => {
   if (Object.keys(userBody).length === 0) {
     const id = anonimId();
-    return User.create({ name: `ANÒNIM-${id}` });
+    return User.create({ name: `ANONIM-${id}` });
   }
   if (await User.isNameTaken(userBody.name)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Name already taken');
@@ -36,7 +36,7 @@ const updateNameUser = async (userBody, userParams) => {
     await User.updateOne({ name: userParams.name }, { name: userBody.name });
     return User.findOne({ name: userBody.name });
   }
-  throw new ApiError(httpStatus.BAD_REQUEST, "Name dosen't exsist");
+  throw new ApiError(httpStatus.BAD_REQUEST, "Name doesn't exsist");
 };
 
 /**
@@ -46,12 +46,12 @@ const updateNameUser = async (userBody, userParams) => {
  */
 const getUserByName = async (name) => {
   const user = await User.findOne({ name });
-  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "Name dosen't exsist");
+  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "Name doesn't exsist");
   return user;
 };
 
 const updateGames = async (name, newUser = { games: [], lost: 0, won: 0, succes_rate: 0 }) => {
-  if (!(await getUserByName(name))) throw new ApiError(httpStatus.BAD_REQUEST, "Name dosen't exsist");
+  if (!(await getUserByName(name))) throw new ApiError(httpStatus.BAD_REQUEST, "Name doesn't exsist");
   await User.updateOne({ name }, { games: newUser.games });
   await User.updateOne({ name }, { lost: newUser.lost });
   await User.updateOne({ name }, { won: newUser.won });

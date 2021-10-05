@@ -43,8 +43,8 @@ userSchema.plugin(toJSON);
  * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
  * @returns {Promise<boolean>}
  */
-userSchema.statics.isNameTaken = async function (name, excludeUserId) {
-  const user = await this.findOne({ name, _id: { $ne: excludeUserId } });
+userSchema.statics.isNameTaken = async function (name) {
+  const user = await this.findOne({ name });
   return !!user;
 };
 

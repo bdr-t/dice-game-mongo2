@@ -20,7 +20,7 @@ const userTwo = {
 
 const userThree = {
   _id: mongoose.Types.ObjectId(),
-  name: 'userTwo',
+  name: 'userThree',
   games: [],
   succes_rate: 0,
 };

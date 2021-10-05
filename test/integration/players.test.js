@@ -1,12 +1,11 @@
 const request = require('supertest');
-// const faker = require('faker');
 const httpStatus = require('http-status');
 
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
 const { User } = require('../../src/models');
 const { userOne, userTwo, userThree, insertUsers } = require('../fixtures/user.fixture');
-const { userOneAccessToken, insertToken } = require('../fixtures/token.fixture');
+const { userOneAccessToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
 
@@ -16,7 +15,6 @@ describe('Players routes', () => {
   describe('POST /players', () => {
     test('should return 201 and succesfuly create new user', async () => {
       await insertUsers([userOne]);
-      await insertToken();
 
       const res = await request(app)
         .post('/players')
@@ -41,7 +39,6 @@ describe('Players routes', () => {
     });
     test('should return 400 error if name is already used', async () => {
       await insertUsers([userOne]);
-      await insertToken();
 
       await request(app)
         .post('/players')
@@ -57,7 +54,6 @@ describe('Players routes', () => {
     });
     test('should return 201 and succesfully create new user without name', async () => {
       await insertUsers([userOne]);
-      await insertToken();
 
       const res = await request(app)
         .post('/players')
@@ -66,7 +62,7 @@ describe('Players routes', () => {
 
       expect(res.body.user).toEqual({
         id: expect.anything(),
-        name: 'ANÒNIM-1',
+        name: 'ANONIM-1',
         games: [],
         succes_rate: 0,
         lost: 0,
@@ -80,7 +76,7 @@ describe('Players routes', () => {
 
       expect(res2.body.user).toEqual({
         id: expect.anything(),
-        name: 'ANÒNIM-2',
+        name: 'ANONIM-2',
         games: [],
         succes_rate: 0,
         lost: 0,
@@ -93,7 +89,6 @@ describe('Players routes', () => {
     const newName = { name: 'newName' };
     test('should return 200 and successfully update user if data is ok', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
 
       const res = await request(app)
         .put(`/players/${userTwo.name}`)
@@ -112,12 +107,11 @@ describe('Players routes', () => {
     });
     test('should return 401 error if access token is missing', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
+
       await request(app).put(`/players/${userTwo.name}`).send(newName).expect(httpStatus.UNAUTHORIZED);
     });
-    test("should return 400 error if name dosen't exist", async () => {
+    test("should return 400 error if name doesn't exist", async () => {
       await insertUsers([userOne]);
-      await insertToken();
 
       await request(app)
         .put(`/players/name`)
@@ -127,7 +121,6 @@ describe('Players routes', () => {
     });
     test('should return 400 error if name already exist', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
 
       await request(app)
         .put(`/players/name`)
@@ -138,7 +131,6 @@ describe('Players routes', () => {
 
     test('should return 400 if you try to change admin name', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
 
       await request(app)
         .put(`/players/name`)
@@ -149,7 +141,6 @@ describe('Players routes', () => {
 
     test('should return 400 if you tray to change inexistent user', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
       await request(app)
         .put(`/players/jahsjhkasjhsad`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -164,7 +155,7 @@ describe('Players routes', () => {
     });
     test('should return 200 if player exists', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
+
       const res = await request(app)
         .post(`/players/${userTwo.name}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -182,7 +173,6 @@ describe('Players routes', () => {
   describe('DELETE /players/name', () => {
     test('should return 200 and delete all the games', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
 
       await request(app)
         .post(`/players/${userTwo.name}`)
@@ -212,9 +202,9 @@ describe('Players routes', () => {
       await request(app).post(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
     });
 
-    test("should return 400 error if name dosen't exist", async () => {
+    test("should return 400 error if name doesn't exist", async () => {
       await insertUsers([userOne]);
-      await insertToken();
+
       await request(app)
         .delete(`/players/bader`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -225,7 +215,7 @@ describe('Players routes', () => {
   describe('GET /players', () => {
     test('should return 200 and get all the players', async () => {
       await insertUsers([userOne, userTwo, userThree]);
-      await insertToken();
+
       const { body } = await request(app)
         .get(`/players`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -235,7 +225,7 @@ describe('Players routes', () => {
 
     test('should return 200 if there are no users yet', async () => {
       await insertUsers([userOne]);
-      await insertToken();
+
       const res = await request(app)
         .get(`/players`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -254,7 +244,7 @@ describe('Players routes', () => {
   describe('GET /players/:name', () => {
     test('should return 200 and get the player', async () => {
       await insertUsers([userOne, userTwo]);
-      await insertToken();
+
       const { body } = await request(app)
         .get(`/players/${userTwo.name}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -272,7 +262,7 @@ describe('Players routes', () => {
 
     test("should return 400 error if user dosn't exist", async () => {
       await insertUsers([userOne]);
-      await insertToken();
+
       await request(app)
         .get(`/players/bader`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)

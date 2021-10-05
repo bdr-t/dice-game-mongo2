@@ -9,7 +9,7 @@ const Game = async (name) => {
   const dice1 = Math.floor(Math.random() * 6) + 1;
   const dice2 = Math.floor(Math.random() * 6) + 1;
   const result = dice1 + dice2 === 7 ? 1 : 0;
-  const resultText = dice1 + dice2 === 7 ? 'You Win' : 'You lost';
+  const resultText = dice1 + dice2 === 7 ? 'You Won' : 'You lost';
   let { won, lost } = await userService.getUserByName(name);
   won = dice1 + dice2 === 7 ? (won += 1) : won;
   lost = dice1 + dice2 !== 7 ? (lost += 1) : lost;

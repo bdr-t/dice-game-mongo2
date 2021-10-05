@@ -5,7 +5,7 @@ const httpStatus = require('http-status');
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
 const { userOne, insertUsers } = require('../fixtures/user.fixture');
-const { userOneAccessToken, insertToken } = require('../fixtures/token.fixture');
+const { userOneAccessToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
 
@@ -49,7 +49,7 @@ describe('Ranking routes', () => {
   describe('GET /', () => {
     test('should return 200 and successfully return the ranking of the players', async () => {
       await insertUsers([userOne, winner, loser]);
-      await insertToken();
+
       const res = await request(app)
         .get('/ranking')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -66,7 +66,6 @@ describe('Ranking routes', () => {
 
     test('should return 200 if there are no users', async () => {
       await insertUsers([userOne]);
-      await insertToken();
       const res = await request(app)
         .get(`/ranking`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -85,7 +84,6 @@ describe('Ranking routes', () => {
   describe('GET /ranking/winner', () => {
     test('should return 200 and successfully return the winner', async () => {
       await insertUsers([userOne, winner, loser]);
-      await insertToken();
 
       const res = await request(app)
         .get(`/ranking/winner`)
@@ -98,7 +96,6 @@ describe('Ranking routes', () => {
     });
     test('should return 200 and successfully return more than one winer if they are tied', async () => {
       await insertUsers([userOne, winner, loser, winner2]);
-      await insertToken();
 
       const res = await request(app)
         .get(`/ranking/winner`)
@@ -114,7 +111,6 @@ describe('Ranking routes', () => {
     });
     test('should return 200 if there are no users', async () => {
       await insertUsers([userOne]);
-      await insertToken();
       const res = await request(app)
         .get(`/ranking/winner`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
@@ -132,7 +128,6 @@ describe('Ranking routes', () => {
   describe('GET /ranking/loser', () => {
     test('should return 200 and successfully return the loser', async () => {
       await insertUsers([userOne, winner, loser]);
-      await insertToken();
 
       const res = await request(app)
         .get(`/ranking/loser`)
@@ -145,7 +140,6 @@ describe('Ranking routes', () => {
     });
     test('should return 200 and successfully return more than one loser if they are tied', async () => {
       await insertUsers([userOne, winner, loser, loser2]);
-      await insertToken();
 
       const res = await request(app)
         .get(`/ranking/loser`)
@@ -161,7 +155,6 @@ describe('Ranking routes', () => {
     });
     test('should return 200 if there are no users', async () => {
       await insertUsers([userOne]);
-      await insertToken();
       const res = await request(app)
         .get(`/ranking/loser`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
