@@ -28,7 +28,7 @@ const createUser = async (userBody) => {
 
 const updateNameUser = async (userBody, userParams) => {
   if (await User.isNameTaken(userBody.name)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'That name already exists');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Name already taken');
   }
 
   if (await User.isNameTaken(userParams.name)) {

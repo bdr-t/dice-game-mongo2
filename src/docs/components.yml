@@ -7,9 +7,21 @@ components:
           type: string
         name:
           type: string
+        lost:
+          type: number
+        won:
+          type: number
+        succes_rate:
+          type: number
+        games:
+          type: array
       example:
         id: 5ebac534954b54139806c112
         name: fake name
+        lost: 0
+        won: 0
+        succes_rate: 0
+        games: []
 
     Token:
       type: object
@@ -39,16 +51,56 @@ components:
         message:
           type: string
 
+    RankingUser:
+      type: object
+      properties:
+        name:
+          type: string
+        succes_rate:
+          type: number
+      example:
+        name: fake name
+        succes_rate: 0.3
+            
+
+
+
+    Game:
+      typ: object
+      properties:
+        dice1: 
+          type: number
+        dice2: 
+          type: number
+        succes_rate: 
+          type: number
+        result:
+          type: string
+      example:
+        dice1: 2
+        dice2: 3
+        succes_rate: 0
+        result: 'You lost'
+
   responses:
-    DuplicateEmail:
-      description: Email already taken
+    DuplicateName:
+      description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
             code: 400
-            message: Email already taken
+            message: Name already taken
+    InexistentName:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Name doesn't exsist
     Unauthorized:
       description: Unauthorized
       content:
