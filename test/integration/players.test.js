@@ -85,13 +85,13 @@ describe('Players routes', () => {
     });
   });
 
-  describe('PUT /players/:name', () => {
+  describe('PUT /players/:id', () => {
     const newName = { name: 'newName' };
     test('should return 200 and successfully update user if data is ok', async () => {
       await insertUsers([userOne, userTwo]);
 
       const res = await request(app)
-        .put(`/players/${userTwo.name}`)
+        .put(`/players/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(newName)
         .expect(httpStatus.OK);
@@ -108,7 +108,7 @@ describe('Players routes', () => {
     test('should return 401 error if access token is missing', async () => {
       await insertUsers([userOne, userTwo]);
 
-      await request(app).put(`/players/${userTwo.name}`).send(newName).expect(httpStatus.UNAUTHORIZED);
+      await request(app).put(`/players/${userTwo._id}`).send(newName).expect(httpStatus.UNAUTHORIZED);
     });
     test("should return 400 error if name doesn't exist", async () => {
       await insertUsers([userOne]);
@@ -149,15 +149,15 @@ describe('Players routes', () => {
     });
   });
 
-  describe('POST /players/:name', () => {
+  describe('POST /players/:id', () => {
     test('should return 401 error if access token is missing', async () => {
-      await request(app).post(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
+      await request(app).post(`/players/${userTwo._id}`).expect(httpStatus.UNAUTHORIZED);
     });
     test('should return 200 if player exists', async () => {
       await insertUsers([userOne, userTwo]);
 
       const res = await request(app)
-        .post(`/players/${userTwo.name}`)
+        .post(`/players/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .expect(httpStatus.OK);
 
@@ -170,22 +170,22 @@ describe('Players routes', () => {
     });
   });
 
-  describe('DELETE /players/name', () => {
+  describe('DELETE /players/:id', () => {
     test('should return 200 and delete all the games', async () => {
       await insertUsers([userOne, userTwo]);
 
       await request(app)
-        .post(`/players/${userTwo.name}`)
+        .post(`/players/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .expect(httpStatus.OK);
 
       await request(app)
-        .post(`/players/${userTwo.name}`)
+        .post(`/players/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .expect(httpStatus.OK);
 
       const res = await request(app)
-        .delete(`/players/${userTwo.name}`)
+        .delete(`/players/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .expect(httpStatus.OK);
 
@@ -199,7 +199,7 @@ describe('Players routes', () => {
       });
     });
     test('should return 401 error if access token is missing', async () => {
-      await request(app).post(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
+      await request(app).post(`/players/${userTwo._id}`).expect(httpStatus.UNAUTHORIZED);
     });
 
     test("should return 400 error if name doesn't exist", async () => {
@@ -237,16 +237,16 @@ describe('Players routes', () => {
     });
 
     test('should return 401 error if access token is missing', async () => {
-      await request(app).get(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
+      await request(app).get(`/players/${userTwo._id}`).expect(httpStatus.UNAUTHORIZED);
     });
   });
 
-  describe('GET /players/:name', () => {
+  describe('GET /players/:id', () => {
     test('should return 200 and get the player', async () => {
       await insertUsers([userOne, userTwo]);
 
       const { body } = await request(app)
-        .get(`/players/${userTwo.name}`)
+        .get(`/players/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .expect(httpStatus.OK);
 
@@ -270,7 +270,7 @@ describe('Players routes', () => {
     });
 
     test('should return 401 error if access token is missing', async () => {
-      await request(app).get(`/players/${userTwo.name}`).expect(httpStatus.UNAUTHORIZED);
+      await request(app).get(`/players/${userTwo._id}`).expect(httpStatus.UNAUTHORIZED);
     });
   });
 });

@@ -11,10 +11,10 @@ const router = express.Router();
 router.post('/', auth(), playersController.createUser);
 router.get('/', auth(), playersController.getAllUsers);
 
-router.get('/:name', auth(), playersController.getUser);
-router.put('/:name', auth(), playersController.updateUser);
-router.delete('/:name', auth(), playersController.deleteGames);
-router.post('/:name', auth(), playersController.createGame);
+router.get('/:id', auth(), playersController.getUser);
+router.put('/:id', auth(), playersController.updateUser);
+router.delete('/:id', auth(), playersController.deleteGames);
+router.post('/:id', auth(), playersController.createGame);
 
 module.exports = router;
 
@@ -96,7 +96,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /players/{name}:
+ * /players/{id}:
  *   post:
  *     summary: Plag game
  *     description: Only admin can play

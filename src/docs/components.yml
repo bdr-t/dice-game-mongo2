@@ -91,7 +91,7 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             code: 400
-            message: Name already taken
+            message: User already exists
     InexistentName:
       description: Bad request
       content:
@@ -100,7 +100,7 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             code: 400
-            message: Name doesn't exsist
+            message: User doesn't exsist
     Unauthorized:
       description: Unauthorized
       content:

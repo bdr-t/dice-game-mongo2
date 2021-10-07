@@ -14,9 +14,9 @@ const updateUser = catchAsync(async (req, res) => {
 });
 
 const createGame = catchAsync(async (req, res) => {
-  await userService.getUserByName(req.params.name);
-  const game = await Game(req.params.name);
-  const user = await userService.getUserByName(req.params.name);
+  const user = await userService.getUserById(req.params.id);
+  const game = await Game(user.won, user.lost);
+
   const newUser = {
     succes_rate: game.succes_rate,
     games: [...user.games, game.game],
@@ -24,7 +24,7 @@ const createGame = catchAsync(async (req, res) => {
     lost: game.lost,
   };
 
-  await userService.updateGames(req.params.name, newUser);
+  await userService.updateGames(req.params.id, newUser);
 
   res.status(httpStatus.OK).send({
     dice1: game.dice1,
@@ -35,7 +35,7 @@ const createGame = catchAsync(async (req, res) => {
 });
 
 const deleteGames = catchAsync(async (req, res) => {
-  const user = await userService.updateGames(req.params.name);
+  const user = await userService.updateGames(req.params.id);
   res.status(httpStatus.OK).send({ user });
 });
 
@@ -45,7 +45,7 @@ const getAllUsers = catchAsync(async (req, res) => {
 });
 
 const getUser = catchAsync(async (req, res) => {
-  const user = await userService.getUserByName(req.params.name);
+  const user = await userService.getUserById(req.params.id);
   res.status(httpStatus.OK).send({ user });
 });
 

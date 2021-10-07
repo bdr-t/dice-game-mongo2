@@ -26,32 +26,41 @@ const createUser = async (userBody) => {
  * @returns {Promise<User>}
  */
 
-const updateNameUser = async (userBody, userParams) => {
-  if (await User.isNameTaken(userBody.name)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Name already taken');
-  }
-
-  if (await User.isNameTaken(userParams.name)) {
-    if (userParams.name === 'admin') throw new ApiError(httpStatus.BAD_REQUEST, "Can't modify admin name");
-    await User.updateOne({ name: userParams.name }, { name: userBody.name });
-    return User.findOne({ name: userBody.name });
-  }
-  throw new ApiError(httpStatus.BAD_REQUEST, "Name doesn't exsist");
-};
-
 /**
  * Get user by name
  * @param {string} name
  * @returns {Promise<User>}
  */
-const getUserByName = async (name) => {
-  const user = await User.findOne({ name });
-  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "Name doesn't exsist");
+const getUserById = async (id) => {
+  const user = await User.findById(id);
+  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "User doesn't exsist");
   return user;
 };
 
-const updateGames = async (name, newUser = { games: [], lost: 0, won: 0, succes_rate: 0 }) => {
-  if (!(await getUserByName(name))) throw new ApiError(httpStatus.BAD_REQUEST, "Name doesn't exsist");
+const updateNameUser = async (userBody, userParams) => {
+  if (await User.isNameTaken(userBody.name)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User already taken');
+  }
+
+  const user = await User.findById(userParams.id);
+
+  if (await User.isNameTaken(user.name)) {
+    if (user.name === 'admin') throw new ApiError(httpStatus.BAD_REQUEST, "Can't modify admin name");
+    await User.updateOne({ name: user.name }, { name: userBody.name });
+    return User.findOne({ name: userBody.name });
+  }
+  throw new ApiError(httpStatus.BAD_REQUEST, "User doesn't exsist");
+};
+
+const getUserByName = async (name) => {
+  const user = await User.findOne({ name });
+  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "User doesn't exsist");
+  return user;
+};
+
+const updateGames = async (id, newUser = { games: [], lost: 0, won: 0, succes_rate: 0 }) => {
+  const { name } = await User.findById(id);
+  if (!name) throw new ApiError(httpStatus.BAD_REQUEST, "User doesn't exsist");
   await User.updateOne({ name }, { games: newUser.games });
   await User.updateOne({ name }, { lost: newUser.lost });
   await User.updateOne({ name }, { won: newUser.won });
@@ -65,8 +74,9 @@ const getAllUsers = async () => {
 
 module.exports = {
   createUser,
-  getUserByName,
+  getUserById,
   updateNameUser,
   updateGames,
   getAllUsers,
+  getUserByName,
 };
